@@ -1,0 +1,30 @@
+{
+    "bridge": {
+        "name": "Homebridge",
+        "username": "DD:22:3D:E3:CE:30",
+        "port": 51826,
+        "pin": "714-45-154"
+    },
+    
+    "description": "Sample file to hook blink.py to a homebridge network ssh",
+
+    "accessories": [
+
+        {
+             "accessory": "SSH",
+             "name": "Blink Camera",
+             "on": "python blink.py  --action arm",
+             "off": "python blink.py --action disarm",
+             "state": "python blink.py --action status",
+             "on_value" : "armed",
+             "exact_match": true,
+                     "ssh": {
+                     "user": "***YOUR_MAC_LOGIN***",
+                    "host": "localhost",
+                    "port": 22,
+                    "password": "***YOUR_MAC_PASSWORD***"
+                    }
+        }
+        ]
+
+}

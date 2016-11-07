@@ -6,8 +6,9 @@ import ConfigParser
 
 #Get the Action
 parser = argparse.ArgumentParser(description='Pass Parameters')
-parser.add_argument(  '--action', nargs='?',  required=True, help='Action arm|disarm|homescreen|events|isarmed|clips'  )
+parser.add_argument(  '--action', nargs='?',  required=True, help='Action arm|disarm|homescreen|events|isarmed|clips|listcams|livecam|makestill|getstill'  )
 parser.add_argument(  '--debug', nargs='?', type=int, default=0, required=False, help='Debug Level Output'  )
+parser.add_argument(  '--camera', nargs='?', type=int, default=0, required=False, help='Live Camera ID'  )
 a = parser.parse_args()
 
 
@@ -68,8 +69,43 @@ elif a.action == "events":
 
 elif a.action == "clips":
 	print "Clips"
-	clips=bl.getClips(authtoken,networks[0])
+	clips=bl.listClips(authtoken,networks[0])
 	print json.dumps(clips, indent=4, separators=(',', ': '))
+
+
+elif a.action == "listcams":
+	print "listcams"
+	cams=bl.listCameras(authtoken,networks[0])
+	print json.dumps(cams, indent=4, separators=(',', ': '))
+
+elif a.action == "live":
+	print "Live"
+	caminfo=bl.liveCameras(authtoken,networks[0],str(a.camera))
+	print json.dumps(caminfo, indent=4, separators=(',', ': '))
+
+elif a.action == "makestill":
+	print "makestill"
+	caminfo=bl.makeStill(authtoken,networks[0],str(a.camera))
+	print json.dumps(caminfo, indent=4, separators=(',', ': '))
+	
+
+
+elif a.action == "getstill":
+	print "getstill"
+	caminfo=bl.getStill(authtoken,networks[0],str(a.camera))
+	print json.dumps(caminfo, indent=4, separators=(',', ': '))
+
+
+
+
+elif a.action == "getclips":
+	print "Get Clips"
+	clips=bl.listClips(authtoken,networks[0])
+	for clip in clips:
+		print clip['video_url']
+		bl.getClip(authtoken,clip['video_url'])
+
+
 
 elif a.action == "isarmed":
 	print bl.isArmed(authtoken)
